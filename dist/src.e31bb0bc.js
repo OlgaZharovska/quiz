@@ -32088,13 +32088,14 @@ function Hero() {
 
 function Question(_ref) {
   var answer = _ref.answer,
-      _onClick = _ref.onClick;
+      _onClick = _ref.onClick,
+      dataset = _ref.dataset;
   return _react.default.createElement("div", {
     className: "answer",
     onClick: function onClick() {
       _onClick(answer);
     }
-  }, _react.default.createElement("h4", null, answer));
+  }, _react.default.createElement("h4", null, dataset));
 }
 
 function Turn(_ref2) {
@@ -32103,6 +32104,12 @@ function Turn(_ref2) {
       highlight = _ref2.highlight,
       onAnswerSelected = _ref2.onAnswerSelected;
 
+  // function highlightToBgColor(highlight){
+  //   return {
+  //     wrongAnswerTitle: 'lkfjssd',
+  //     highlightCorrect: true
+  //   }
+  // }
   function highlightToBgColor(highlight) {
     var mapping = {
       'none': '',
@@ -32119,14 +32126,28 @@ function Turn(_ref2) {
     }
   }, _react.default.createElement("div", {
     className: "col-6"
-  }, _react.default.createElement("h4", null, question), Object.keys(answers).map(function (answer) {
+  }, _react.default.createElement("h4", null, question), Object.keys(answers).map(function (answer, i) {
     return _react.default.createElement(Question, {
+      dataset: i,
       answer: answer,
       key: answer,
+      validation: answers[answer],
       onClick: onAnswerSelected
     });
   })));
-} // function Continue () {
+} //кожному елементу присвоюється prop true, компонент з таким prop підсвічується.
+// в залежності чи відповідь коректна підсвічується червоним компонент з title, що передається з onAnswerSelected
+//  1. Передати title вибраного компонента з onAnswerSelected
+//  2. Check if answer is true
+//  3. change bg-color with prop = true to green
+//     if(false){
+//      change bg-color with title={selected} to red
+//   
+// }
+// 4. Func highlight should return a value green for component with valid prop equal to true
+// also value red for component with selected incorrect answer
+// дає сигнал підсвітити зеленим true, якщо 
+// function Continue () {
 //   return(<div/>);
 // }
 
@@ -32223,7 +32244,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import {shuffle, sample} from 'underscore';
 var quizData = [{
   question: 'Політ нормальний?',
   answers: {
@@ -32313,7 +32333,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57149" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60567" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

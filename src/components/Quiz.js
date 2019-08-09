@@ -17,14 +17,22 @@ function Hero () {
   );
 }
 
-function Question({answer, onClick}) {
+function Question({answer, onClick, dataset}) {
   return (<div className="answer" onClick={() => {onClick(answer);}}>
-    <h4>{answer}</h4>
+    <h4>{dataset}</h4>
   </div>
   );
 }
 
 function Turn({question, answers, highlight, onAnswerSelected}) {
+
+  // function highlightToBgColor(highlight){
+  //   return {
+  //     wrongAnswerTitle: 'lkfjssd',
+  //     highlightCorrect: true
+  //   }
+  // }
+
   function highlightToBgColor(highlight) {
     const mapping = {
       'none': '',
@@ -37,10 +45,26 @@ function Turn({question, answers, highlight, onAnswerSelected}) {
   return (<div className="row turn" style={{backgroundColor: highlightToBgColor(highlight)}}>
     <div className="col-6">
     <h4>{question}</h4>
-      {Object.keys(answers).map((answer) => <Question answer={answer} key={answer} onClick={onAnswerSelected} />)}
+      {Object.keys(answers).map((answer, i) => <Question dataset={i} answer={answer} key={answer} 
+      validation={answers[answer]} onClick={onAnswerSelected} />)}
     </div>
   </div>);
 }
+
+//кожному елементу присвоюється prop true, компонент з таким prop підсвічується.
+// в залежності чи відповідь коректна підсвічується червоним компонент з title, що передається з onAnswerSelected
+
+//  1. Передати title вибраного компонента з onAnswerSelected
+//  2. Check if answer is true
+//  3. change bg-color with prop = true to green
+//     if(false){
+  //      change bg-color with title={selected} to red
+  //   
+
+// }
+// 4. Func highlight should return a value green for component with valid prop equal to true
+// also value red for component with selected incorrect answer
+// дає сигнал підсвітити зеленим true, якщо 
 
 // function Continue () {
 //   return(<div/>);
