@@ -1,106 +1,74 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
 import '../App.css';
-import '../bootstrap.min.css';
 
 
-function Hero () {
+function Question({ answer, onClick, dataset, className }) {
+  return (<li className={`answer ${className}`} onClick={() => { onClick(answer, dataset); }}>
+    <p>{answer}</p>
+  </li>);
+}
+
+function Turn({ question, answers, highlight, isEnd, answerNumbers, score, noq, onAnswerSelected }) {
+
   return (
     <div className="row">
-      <div className="jumbotron col-10 offset-1">
-        <h1>Author Quiz</h1>
-        <p>Select the book written by author shown</p>
-      </div>
+      {isEnd
+        ? <div className="end">
+          <h1>You've answered correctly {score} questions out of {noq}</h1>
+        </div>
+        :
+        <div className="col-lg-10 offset-lg-1" id="container">
+          <div id="question">{question}</div>
+          <div id="answers">
+            <ul>
+              {highlight == ''
+                ? Object.keys(answers).map((answer, i) => <Question dataset={i} answer={answer} key={answer} onClick={onAnswerSelected} />)
+                : highlight == 'correct'
+                  ? Object.keys(answers).map((answer, i) => i == answerNumbers.correctNum
+                    ? <Question dataset={i} answer={answer} key={answer} className="correct" onClick={onAnswerSelected} />
+                    : <Question dataset={i} answer={answer} key={answer} onClick={onAnswerSelected} />)
+                  : Object.keys(answers).map((answer, i) => i == answerNumbers.wrongNum
+                    ? <Question dataset={i} answer={answer} key={answer} className="wrong" onClick={onAnswerSelected} />
+                    : i == answerNumbers.correctNum
+                      ? <Question dataset={i} answer={answer} key={answer} className="correct" onClick={onAnswerSelected} />
+                      : <Question dataset={i} answer={answer} key={answer} onClick={onAnswerSelected} />)
+              }
+            </ul>
+          </div>
+        </div>
+      }
     </div>
   );
 }
 
-function Question({answer, onClick, dataset}) {
-  return (<div className="answer" onClick={() => {onClick(answer);}}>
-    <h4>{dataset}</h4>
-  </div>
-  );
-}
-
-function Turn({question, answers, highlight, onAnswerSelected}) {
-
-  // function highlightToBgColor(highlight){
-  //   return {
-  //     wrongAnswerTitle: 'lkfjssd',
-  //     highlightCorrect: true
-  //   }
-  // }
-
-  function highlightToBgColor(highlight) {
-    const mapping = {
-      'none': '',
-      'correct': 'green',
-      'wrong': 'red'
-    };
-    return mapping[highlight];
-  }
-
-  return (<div className="row turn" style={{backgroundColor: highlightToBgColor(highlight)}}>
-    <div className="col-6">
-    <h4>{question}</h4>
-      {Object.keys(answers).map((answer, i) => <Question dataset={i} answer={answer} key={answer} 
-      validation={answers[answer]} onClick={onAnswerSelected} />)}
-    </div>
-  </div>);
-}
-
-//кожному елементу присвоюється prop true, компонент з таким prop підсвічується.
-// в залежності чи відповідь коректна підсвічується червоним компонент з title, що передається з onAnswerSelected
-
-//  1. Передати title вибраного компонента з onAnswerSelected
-//  2. Check if answer is true
-//  3. change bg-color with prop = true to green
-//     if(false){
-  //      change bg-color with title={selected} to red
-  //   
-
-// }
-// 4. Func highlight should return a value green for component with valid prop equal to true
-// also value red for component with selected incorrect answer
-// дає сигнал підсвітити зеленим true, якщо 
-
-// function Continue () {
-//   return(<div/>);
-// }
 function Continue({ show, onContinue }) {
   return (
     <div className="row continue">
-    { show 
-      ? <div className="col-11">
+      {show
+        ? <div className="col-11">
           <button className="btn btn-primary btn-lg float-right" onClick={onContinue}>Continue</button>
         </div>
-      : null }
+        : null}
     </div>
   );
-}
-
-function Footer () {
-  return (<div id="footer" className="row">
-    <div className="col-12">
-      <p className="text-muted credit">All images are from Wikimedia Commons and are in the public domain.
-      </p>
-    </div>
-  </div>);
 }
 
 function mapStateToProps(state) {
   return {
     turnData: state.turnData,
-    highlight: state.highlight
+    noq: state.quizData.length,
+    highlight: state.highlight,
+    isEnd: state.isEnd,
+    answerNumbers: state.answerNumbers,
+    score: state.score
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onAnswerSelected: (answer) => {
-      dispatch({ type: 'ANSWER_SELECTED', answer });
+    onAnswerSelected: (answer, dataset) => {
+      dispatch({ type: 'ANSWER_SELECTED', answer, dataset });
     },
     onContinue: () => {
       dispatch({ type: 'CONTINUE' });
@@ -109,13 +77,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 const Quiz = connect(mapStateToProps, mapDispatchToProps)(
-  function ({turnData, highlight, onAnswerSelected, onContinue}) {
+  function ({ turnData, noq, highlight, isEnd, answerNumbers, score, onAnswerSelected, onContinue }) {
     return (
       <div className="container-fluid">
-        <Hero />
-        <Turn {...turnData} highlight={highlight} onAnswerSelected={onAnswerSelected} />
-        <Continue show={highlight === 'correct'} onContinue={onContinue}/>
-        <Footer />
+        <Turn {...turnData} highlight={highlight} isEnd={isEnd} answerNumbers={answerNumbers} onAnswerSelected={onAnswerSelected} score={score} noq={noq} />
+        <Continue show={highlight === 'correct' || highlight === 'wrong'} onContinue={onContinue} />
       </div>
     );
   });
