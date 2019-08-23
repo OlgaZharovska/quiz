@@ -29379,28 +29379,28 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var quizData = [{
-  question: 'Політ нормальний?',
+  question: 'What is the capital of the Falkland Islands?',
   answers: {
-    'sdlfjd': false,
-    'єп': true,
-    'oiji': false,
-    'oijisdf': false
+    'Banksy': false,
+    'Stanley': true,
+    'Ollie': false,
+    'Hugh': false
   }
 }, {
-  question: 'А якшо найду?',
+  question: 'Panama is famous for what waterway??',
   answers: {
-    'sdlfjd': false,
-    'нікогдє': true,
-    'oiji': false,
-    'oijisdf': false
+    'Panama Lake': false,
+    'Panama Canal': true,
+    'Panama Puddle': false,
+    'The River Wild': false
   }
 }, {
-  question: 'Ну нєєєє?',
+  question: 'What is the human population of Peru?',
   answers: {
-    'sdlfjd': false,
-    'воістину нє': true,
-    'oiji': false,
-    'oijisdf': false
+    'Nearly six million': false,
+    'Nearly ten million': true,
+    'Nearly one million': false,
+    '100 thousand': false
   }
 }];
 
@@ -29481,7 +29481,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55773" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58561" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
